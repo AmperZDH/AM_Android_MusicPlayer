@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/list_text"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_weight="4"
+        android:background="@drawable/list_selector"
+        android:textColor="#000000"
+        android:textSize="15dp" />
+
+    <Button
+        android:id="@+id/button_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="up"
+        android:textSize="15dp" />
+
+    <Button
+        android:id="@+id/button_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="do"
+        android:textSize="15dp" />
+
+
+</LinearLayout>
