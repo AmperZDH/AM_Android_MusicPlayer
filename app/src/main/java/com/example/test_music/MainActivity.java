@@ -16,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.test_music.ui.home.HomeFragment;
+import com.example.test_music.utils.LocalUtils;
 import com.example.test_music.utils.SongList;
 import com.google.android.material.navigation.NavigationView;
 
@@ -30,11 +31,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     String TAG;
     private AppBarConfiguration mAppBarConfiguration;
@@ -91,43 +93,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bt_backforword.setOnClickListener(this);
         bt_forward.setOnClickListener(this);
         bt_module.setOnClickListener(this);
-        ArrayList<String> slist = new ArrayList<>();
-        // 获取歌曲列表
-        try {
-            String[] list = getAssets().list("");
-            for (int i = 0; i < list.length; i++) {
-                if (list[i].contains("mp3")) {
-                    slist.add(list[i]);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+
+        ArrayList<String> slist = new ArrayList<>();
+//        // 获取歌曲列表
+//        try {
+//            String[] list = getAssets().list("");
+//            for (int i = 0; i < list.length; i++) {
+//                if (list[i].contains("mp3")) {
+//                    slist.add(list[i]);
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        slist = new LocalUtils().getMusicPath(this);
         songList = new SongList(slist);
 //        EventBus.getDefault().post(songList.getSongList());
+
+        //进度条
         bar_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
                 // fromUser判断是用户改变的滑块的值
-                if(fromUser==true){
+                if (fromUser == true) {
                     mediaPlayer.seekTo(progress);
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 // TODO Auto-generated method stub
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // TODO Auto-generated method stub
             }
         });
     }
-
-
-
 
 
     @Override
@@ -152,14 +157,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 控制播放
      *
-     * @param songName
+     * @param songpath
      */
-    public void play(String songName) {
+    public void play(String songpath) {
         mediaPlayer.reset();
         try {
-            AssetFileDescriptor fileDescriptor = getAssets().openFd(songName);
+
+//            AssetFileDescriptor fileDescriptor = getAssets().openFd(songName);
+//            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getStartOffset());
+            //设置歌曲名称
+            String songName = songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/", "");
+            songName = songName.replace(".flac", "");
             songnameView.setText(songName.replace(".mp3", ""));
-            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getStartOffset());
+
+            mediaPlayer.setDataSource(songpath);
             mediaPlayer.prepare();
             duration = mediaPlayer.getDuration();//获取整首song时间
             bar_progress.setMax(duration);//设置整首song的时间
@@ -169,11 +180,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     Handler handler = new Handler();
-    Runnable updateThread = new Runnable(){
+    Runnable updateThread = new Runnable() {
         public void run() {
             //获得歌曲现在播放位置并设置成播放进度条的值
             bar_progress.setProgress(mediaPlayer.getCurrentPosition());
-            if(mediaPlayer.getCurrentPosition()>=(duration-250)){
+            if (mediaPlayer.getCurrentPosition() >= (duration - 250)) {
                 pausePosition = 0;
                 play(songList.forwardPlay());
                 mediaPlayer.start();
@@ -235,7 +246,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
 
 
 }

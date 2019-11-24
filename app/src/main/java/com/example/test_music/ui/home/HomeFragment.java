@@ -108,15 +108,21 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-            System.out.println("songNAME========" + songList.getSongList().get(position));
-            holder.text_list.setText(songList.getSongList().get(position));
+            final String songpath=songList.getSongList().get(position);
+//            System.out.println("songNAME========" + songList.getSongList().get(position));
+            String songName=songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/","");
+            songName=songName.replace(".mp3","");
+//            songName=songName.replace()
+//            holder.text_list.setText(songList.getSongList().get(position).replace("/storage/emulated/0/netease/cloudmusic/Music/",""));
+//            holder.text_list.setText(songList.getSongList().get(position));
+            holder.text_list.setText(songName);
             //点击播放歌曲
             holder.text_list.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mainActivity.songList.changIndex(position);
                     String songName = mainActivity.songList.getIndexSongName();
-                    mainActivity.play(songName);
+                    mainActivity.play(songpath);
                     mainActivity.mediaPlayer.start();
                     mainActivity.bt_play_stop.setBackgroundResource(R.drawable.player_pause);
                 }
