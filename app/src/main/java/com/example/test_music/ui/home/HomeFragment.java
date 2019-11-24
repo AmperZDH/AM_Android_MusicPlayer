@@ -112,6 +112,7 @@ public class HomeFragment extends Fragment {
 //            System.out.println("songNAME========" + songList.getSongList().get(position));
             String songName=songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/","");
             songName=songName.replace(".mp3","");
+            songName = songName.replace(".flac", "");
 //            songName=songName.replace()
 //            holder.text_list.setText(songList.getSongList().get(position).replace("/storage/emulated/0/netease/cloudmusic/Music/",""));
 //            holder.text_list.setText(songList.getSongList().get(position));

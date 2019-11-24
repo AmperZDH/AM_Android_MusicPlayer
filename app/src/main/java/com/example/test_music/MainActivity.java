@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //            AssetFileDescriptor fileDescriptor = getAssets().openFd(songName);
 //            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getStartOffset());
+            System.out.println("The Play Path is ======= "+songpath);
             //设置歌曲名称
             String songName = songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/", "");
             songName = songName.replace(".flac", "");

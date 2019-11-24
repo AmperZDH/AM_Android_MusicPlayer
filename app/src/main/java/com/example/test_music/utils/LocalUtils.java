@@ -15,6 +15,8 @@ public class LocalUtils {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 String str = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                if(str.contains("storage/emulated/0/Sounds/")||str.contains("/product/media/Pre-loaded/Music/"))
+                    continue;
                 System.out.println(str);
                 songList.add(str);
             }
