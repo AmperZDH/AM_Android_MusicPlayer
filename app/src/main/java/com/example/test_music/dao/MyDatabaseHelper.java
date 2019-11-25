@@ -9,7 +9,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
-
+    /**
+     * 建立 sqlite 数据库
+     */
 
     public static final String CREAT_SONGLIST = "create table songlist ("
             + "id integer primary key autoincrement,"
