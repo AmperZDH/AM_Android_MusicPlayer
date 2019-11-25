@@ -96,19 +96,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         ArrayList<String> slist = new ArrayList<>();
-//        // 获取歌曲列表
-//        try {
-//            String[] list = getAssets().list("");
-//            for (int i = 0; i < list.length; i++) {
-//                if (list[i].contains("mp3")) {
-//                    slist.add(list[i]);
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
         slist = new LocalUtils().getMusicPath(this);
         songList = new SongList(slist);
+
 //        EventBus.getDefault().post(songList.getSongList());
 
         //进度条
@@ -150,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    //获取歌曲列表
     public SongList getSongList() {
         return songList;
     }
@@ -163,9 +155,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mediaPlayer.reset();
         try {
 
-//            AssetFileDescriptor fileDescriptor = getAssets().openFd(songName);
-//            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getStartOffset());
-            System.out.println("The Play Path is ======= "+songpath);
             //设置歌曲名称
             String songName = songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/", "");
             songName = songName.replace(".flac", "");

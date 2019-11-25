@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
                 ViewModelProviders.of(this).get(HomeViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = root.findViewById(R.id.recycle_list);
+        recyclerView = root.findViewById(R.id.recycle_songname);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment {
             this.list = list;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             TextView text_list;
             Button bt_up;
             Button bt_down;
@@ -113,9 +113,6 @@ public class HomeFragment extends Fragment {
             String songName=songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/","");
             songName=songName.replace(".mp3","");
             songName = songName.replace(".flac", "");
-//            songName=songName.replace()
-//            holder.text_list.setText(songList.getSongList().get(position).replace("/storage/emulated/0/netease/cloudmusic/Music/",""));
-//            holder.text_list.setText(songList.getSongList().get(position));
             holder.text_list.setText(songName);
             //点击播放歌曲
             holder.text_list.setOnClickListener(new View.OnClickListener() {

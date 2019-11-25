@@ -5,25 +5,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_createList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_gravity="right"/>
-
-    <TextView
-        android:id="@+id/text_tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/text_inputListName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="请输入创建的歌单名称"
+            android:layout_weight="5" />
 
+        <Button
+            android:id="@+id/button_createList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="create" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_listname"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

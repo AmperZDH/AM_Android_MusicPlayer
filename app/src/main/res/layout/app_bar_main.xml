@@ -62,9 +62,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-
                 android:textColor="#FFFFFF"
-                android:textSize="20dp" />
+                android:textSize="15dp"
+                android:maxLines="1"/>
 
 
             <Button
