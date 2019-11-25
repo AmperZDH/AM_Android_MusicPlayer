@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    String TAG;
     private AppBarConfiguration mAppBarConfiguration;
 
     public Button bt_play_stop;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public SongList songList;
     public MediaPlayer mediaPlayer = new MediaPlayer();
-
+    private ArrayList<String> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,50 +141,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    //获取歌曲列表
-    public SongList getSongList() {
-        return songList;
-    }
-
-    /**
-     * 控制播放
-     *
-     * @param songpath
-     */
-    public void play(String songpath) {
-        mediaPlayer.reset();
-        try {
-
-            //设置歌曲名称
-            String songName = songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/", "");
-            songName = songName.replace(".flac", "");
-            songnameView.setText(songName.replace(".mp3", ""));
-
-            mediaPlayer.setDataSource(songpath);
-            mediaPlayer.prepare();
-            duration = mediaPlayer.getDuration();//获取整首song时间
-            bar_progress.setMax(duration);//设置整首song的时间
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    Handler handler = new Handler();
-    Runnable updateThread = new Runnable() {
-        public void run() {
-            //获得歌曲现在播放位置并设置成播放进度条的值
-            bar_progress.setProgress(mediaPlayer.getCurrentPosition());
-            if (mediaPlayer.getCurrentPosition() >= (duration - 250)) {
-                pausePosition = 0;
-                play(songList.forwardPlay());
-                mediaPlayer.start();
-            }
-            //每次延迟100毫秒再启动线程
-            handler.postDelayed(updateThread, 100);
-        }
-    };
-
-
     @Override
 
     public void onClick(View view) {
@@ -236,6 +192,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+    /**
+     * 获取歌曲列表
+     *
+     * @return
+     */
+    public SongList getSongList() {
+        return songList;
+    }
+
+
+    /**
+     * 获取歌单列表
+     *
+     * @return
+     */
+    public ArrayList<String> getList() {
+        return list;
+    }
+
+    /**
+     * 设置歌单列表
+     *
+     * @param list
+     */
+    public void setList(ArrayList<String> list) {
+        this.list = list;
+    }
+
+    /**
+     * 控制播放
+     *
+     * @param songpath
+     */
+    public void play(String songpath) {
+        mediaPlayer.reset();
+        try {
+
+            //设置歌曲名称
+            String songName = songpath.replace("/storage/emulated/0/netease/cloudmusic/Music/", "");
+            songName = songName.replace(".flac", "");
+            songnameView.setText(songName.replace(".mp3", ""));
+
+            mediaPlayer.setDataSource(songpath);
+            mediaPlayer.prepare();
+            duration = mediaPlayer.getDuration();//获取整首song时间
+            bar_progress.setMax(duration);//设置整首song的时间
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    Handler handler = new Handler();
+    Runnable updateThread = new Runnable() {
+        public void run() {
+            //获得歌曲现在播放位置并设置成播放进度条的值
+            bar_progress.setProgress(mediaPlayer.getCurrentPosition());
+            if (mediaPlayer.getCurrentPosition() >= (duration - 250)) {
+                pausePosition = 0;
+                play(songList.forwardPlay());
+                mediaPlayer.start();
+            }
+            //每次延迟100毫秒再启动线程
+            handler.postDelayed(updateThread, 100);
+        }
+    };
 
 
 }

@@ -8,14 +8,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.test_music.MainActivity;
 import com.example.test_music.R;
 import com.example.test_music.utils.SongList;
 
@@ -28,8 +29,8 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
     Button bt_add;
     RecyclerView recyclerView;
     ListAdapt listAdapt;
-
-    ArrayList<String> list = new ArrayList<>();
+    MainActivity mainActivity;
+    ArrayList<String> list;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,8 +44,11 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        listAdapt = new ListAdapt(list);
+        listAdapt = new ListAdapt();
         recyclerView.setAdapter(listAdapt);
+
+        mainActivity = (MainActivity) getActivity();
+        list=mainActivity.getList();
         return root;
     }
 
@@ -55,19 +59,31 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
                 String newlistName = editText.getText().toString();
                 if (newlistName == "")
                     break;
-//                System.out.println("newlistName == " + newlistName);
                 list.add(newlistName);
-//                listAdapt = new ListAdapt(list);
+                mainActivity.setList(list);
                 recyclerView.setAdapter(listAdapt);
                 break;
         }
     }
 
-    //创建适配器
-    public class ListAdapt extends RecyclerView.Adapter<ListAdapt.ViewHolder> {
-        public ListAdapt(ArrayList<String> list) {
-        }
+    /**
+     * 跳转至另一个Fragment
+     *
+     * @param listname
+     */
+    public void changeToDetailFragment(String listname) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        ToolsdetailFragment toolsdetailFragment = new ToolsdetailFragment();
+        toolsdetailFragment.setListname(listname);
+        transaction.replace(R.id.nav_host_fragment, toolsdetailFragment).commit();
 
+    }
+
+    /**
+     * Android RecycleView 适配器
+     */
+    public class ListAdapt extends RecyclerView.Adapter<ListAdapt.ViewHolder> {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView viewlistname;
@@ -92,32 +108,32 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-//            if (!list.isEmpty()) {
-                holder.viewlistname.setText(list.get(position));
+            holder.viewlistname.setText(list.get(position));
 
-                //编辑歌单
-                holder.viewlistname.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+            //编辑歌单
+            holder.viewlistname.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    changeToDetailFragment(list.get(position));
+                }
+            });
 
-                    }
-                });
-
-                //删除歌单
-                holder.bt_del.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        list.remove(position);
-                        listAdapt = new ListAdapt(list);
-                        recyclerView.setAdapter(listAdapt);
-                    }
-                });
+            //删除歌单
+            holder.bt_del.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    list.remove(position);
+                    mainActivity.setList(list);
+                    listAdapt = new ListAdapt();
+                    recyclerView.setAdapter(listAdapt);
+                }
+            });
 
         }
 
         @Override
         public int getItemCount() {
-            System.out.println("list.size()========="+list.size());
+//            System.out.println("list.size()========="+list.size());
             return list.size();
         }
 
