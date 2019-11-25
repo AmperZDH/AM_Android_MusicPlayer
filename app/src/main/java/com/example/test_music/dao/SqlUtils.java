@@ -40,11 +40,12 @@ public class SqlUtils {
     public void insertValue(String listname, String songname) {
         ContentValues con = new ContentValues();
         try {
-
+            System.out.println("插入成功1 !");
             con.put("listname", listname);
             con.put("songname", songname);
-            db.insert("Notebook", null, con);
-            System.out.println("Insert Successful !");
+            db.insert("songlist", null, con);
+//            System.out.println("Insert Successful !");
+            System.out.println("插入成功2 !");
 
 
         } catch (Exception e) {
