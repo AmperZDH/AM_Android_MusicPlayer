@@ -1,4 +1,4 @@
-package com.example.test_music.utils;
+package com.example.test_music.dao;
 
 public class SqlUtils {
 
