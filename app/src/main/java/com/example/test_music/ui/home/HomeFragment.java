@@ -159,39 +159,61 @@ public class HomeFragment extends Fragment {
             holder.bt_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final int[] choice = {-1};
+//                    final int[] choice = {-1};
                     ArrayList<String> arraylist = mainActivity.getList();
 //                    final Object items = arraylist.toArray();
                     final String[] items = new String[arraylist.size()];
                     for (int i = 0; i < arraylist.size(); i++) {
-                        items[0] = arraylist.get(i);
+                        System.out.println("所有的歌单名称:" + arraylist.get(i));
+                        items[i] = arraylist.get(i);
                     }
 
-                    final String[] name = new String[1];
-                    builder = new AlertDialog.Builder(getContext()).setIcon(R.mipmap.ic_launcher).setTitle("选择歌单")
+//                    final String[] name = new String[1];
+
+//                    builder = new AlertDialog.Builder(getActivity()).setIcon(R.mipmap.ic_launcher).setTitle("选择歌单")
+//                            .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    choice[0] = i;
+////
+//                                    Toast.makeText(getActivity(), "你选择了" + items[choice[0]], Toast.LENGTH_LONG).show();
+//                                }
+//                            }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    if (choice[0] != -1) {
+//                                        System.out.println("你点击保存了" + items[choice[0]] + " 选项为:" + choice[0]);
+//                                        name[0] = items[choice[0]];
+////                                        sql.insertValue(items[choice[0]], songpath);
+//                                        Toast.makeText(getActivity(), "你选择了" + items[choice[0]], Toast.LENGTH_LONG).show();
+//                                    }
+//                                }
+//                            });
+//                    builder.create().show();
+
+//                    final String[] items = {"单选1", "单选2", "单选3", "单选4", "单选5", "单选6"};
+                    final int[] choice = {-1};
+                    builder = new AlertDialog.Builder(getActivity()).setIcon(R.mipmap.ic_launcher).setTitle("单选列表")
                             .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    System.out.println("现在songlist是这个"+items[i]);
                                     choice[0] = i;
-//                                    System.out.println("你点击保存了"+items[choice[0]]);
-//                                    String name = items[choice[0]];
-//                                    sql.insertValue(items[choice[0]],songpath);
-                                    Toast.makeText(getContext(), "你选择了" + items[choice[0]], Toast.LENGTH_LONG).show();
                                 }
                             }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     if (choice[0] != -1) {
-//                                        System.out.println("你点击保存了" + items[choice[0]]);
-                                        name[0] = items[choice[0]];
-//                                        sql.insertValue(items[choice[0]], songpath);
+                                        System.out.println("选择的歌单为:"+items[choice[0]]);
+                                        sql.insertValue(items[choice[0]], songpath);
                                         Toast.makeText(getContext(), "你选择了" + items[choice[0]], Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                     builder.create().show();
-                    sql.insertValue(name[0], songpath);
-                    System.out.println("好像歌曲存进去了");
+
+//                    sql.insertValue(name[0], songpath);
+//                    System.out.println("好像歌曲存进去了");
                 }
             });
 

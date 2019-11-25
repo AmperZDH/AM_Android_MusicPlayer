@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.test_music.MainActivity;
 import com.example.test_music.R;
 import com.example.test_music.dao.SqlUtils;
 import com.example.test_music.ui.home.HomeFragment;
@@ -24,6 +25,7 @@ public class ToolsdetailFragment extends Fragment {
     RecyclerView recyclerView;
     SqlUtils sql;
     SongNameAdapter songListAdapt;
+    MainActivity mainActivity;
     ArrayList<String> songNameList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -31,18 +33,17 @@ public class ToolsdetailFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_tools_detail, container, false);
         sql = new SqlUtils(getActivity(), "Songlist.db", null, 1);
-        System.out.println("The List name ======== " + listname);
-
-
-
+        mainActivity = (MainActivity) getActivity();
 
         recyclerView = root.findViewById(R.id.recycle_collection);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        songNameList = sql.selectSongName(listname);
         songListAdapt = new SongNameAdapter();
         recyclerView.setAdapter(songListAdapt);
 
-        songNameList=sql.selectSongName(listname);
+
         return root;
     }
 
@@ -53,14 +54,15 @@ public class ToolsdetailFragment extends Fragment {
     public class SongNameAdapter extends RecyclerView.Adapter<SongNameAdapter.ViewHolder> {
 
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             TextView viewSongName;
             Button bt_rm;
 
-            public ViewHolder(@NonNull View itemView) {
+            public ViewHolder(View itemView) {
                 super(itemView);
                 viewSongName = itemView.findViewById(R.id.text_collection);
-                bt_rm = itemView.findViewById(R.id.button_collection);
+                bt_rm = itemView.findViewById(R.id.button_delCollection);
+                viewSongName.setClickable(true);
             }
         }
 
@@ -70,12 +72,35 @@ public class ToolsdetailFragment extends Fragment {
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.list_collection, parent, false);
             ViewHolder holder = new ViewHolder(view);
-            return null;
+            return holder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.viewSongName.setText(songNameList.get(position));
+        public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+            final String path = songNameList.get(position);
+            String name = path.replace("/storage/emulated/0/netease/cloudmusic/Music/", "");
+            name = name.replace(".mp3", "");
+            name = name.replace(".flac", "");
+            holder.viewSongName.setText(name);
+
+            //点击歌单歌曲播放
+            holder.viewSongName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainActivity.songList.setSongList(songNameList);
+                    mainActivity.play(songNameList.get(position));
+                }
+            });
+
+            //删除歌单内某歌曲
+            holder.bt_rm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sql.deleteSong(listname, path);
+                    recyclerView.setAdapter(songListAdapt);
+                }
+            });
+
         }
 
         @Override

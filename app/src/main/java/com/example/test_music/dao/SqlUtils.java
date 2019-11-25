@@ -30,7 +30,6 @@ public class SqlUtils {
         this.db = this.dbHelper.getWritableDatabase();
     }
 
-
     /**
      * 插入一首歌曲到某个歌单
      *
@@ -43,11 +42,10 @@ public class SqlUtils {
             System.out.println("插入成功1 !");
             con.put("listname", listname);
             con.put("songname", songname);
+            System.out.println("歌单:" + listname + " 歌名:" + songname);
             db.insert("songlist", null, con);
-//            System.out.println("Insert Successful !");
+
             System.out.println("插入成功2 !");
-
-
         } catch (Exception e) {
             System.out.println("ERROR : Sql Insert Failed ");
         }
@@ -94,9 +92,9 @@ public class SqlUtils {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 String listname = cursor.getString(cursor.getColumnIndex("listname"));
+                System.out.println("歌单中存在的歌曲有: " + listname);
                 list.add(listname);
                 cursor.moveToNext();
-
             }
             return list;
         } catch (Exception e) {
@@ -106,7 +104,6 @@ public class SqlUtils {
 
     }
 
-
     /**
      * 查询某歌单下所有歌曲名称
      *
@@ -115,17 +112,25 @@ public class SqlUtils {
      */
     public ArrayList<String> selectSongName(String listname) {
         ArrayList<String> list = new ArrayList<>();
+        System.out.println("Sql Select ============ 开始查询");
         try {
-            Cursor cursor = db.query("songlist", new String[]{"songname"}, "listname=?", new String[]{listname}, null, null, null);
+            Cursor cursor = db.query("songlist", new String[]{"listname", "songname"}, "listname = ?", new String[]{ listname }, null, null, null);
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+//            while (!cursor.isAfterLast()) {
+//                String songname = cursor.getString(cursor.getColumnIndex("songname"));
+//                System.out.println("查询所有歌曲 ============ " + songname);
+//                list.add(songname);
+//                cursor.moveToNext();
+//            }
+            while (cursor.moveToNext()) {
                 String songname = cursor.getString(cursor.getColumnIndex("songname"));
+                System.out.println("查询所有歌曲 ============ " + songname);
                 list.add(songname);
-                cursor.moveToNext();
+
             }
             return list;
         } catch (Exception e) {
-            System.out.println("ERROR : Sql Select SongName Failed ");
+            System.out.println("ERROR : Sql Select SongName Failed!!!!!!!!!!!!!!!! ");
             return null;
         }
     }

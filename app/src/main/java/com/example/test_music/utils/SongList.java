@@ -162,4 +162,13 @@ public class SongList {
         return qlist.get(num);
     }
 
+    /**
+     * 重新设置播放的歌单
+     *
+     * @param list
+     */
+    public void setSongList(ArrayList<String> list) {
+        this.qlist = list;
+        this.index = 0;
+    }
 }
