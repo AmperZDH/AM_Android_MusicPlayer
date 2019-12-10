@@ -74,8 +74,9 @@ public class ToolsFragment extends Fragment implements View.OnClickListener {
     public void changeToDetailFragment(String listname) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        //创建fragment
         ToolsdetailFragment toolsdetailFragment = new ToolsdetailFragment();
-        toolsdetailFragment.setListname(listname);
+        toolsdetailFragment.setListname(listname);//设置
         transaction.replace(R.id.nav_host_fragment, toolsdetailFragment).commit();
 
     }

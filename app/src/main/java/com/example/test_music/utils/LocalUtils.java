@@ -6,6 +6,9 @@ import android.provider.MediaStore;
 
 import java.util.ArrayList;
 
+/**
+ * 扫描所有的本地歌曲
+ */
 public class LocalUtils {
     ArrayList<String> songList = new ArrayList<>();
 
